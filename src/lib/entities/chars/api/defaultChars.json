@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "name": "Berbar",
+    "img": "#",
+    "charClass": "barbarian",
+    "hp": 1,
+    "strength": 1,
+    "agility": 1
+  }
+]
