@@ -1,5 +1,12 @@
 import { Mission } from "./types";
 import { createEvent, createStore } from "effector";
+import { faker } from "@faker-js/faker";
+
+export enum MissionPositionType {
+  angel = "ANGEL",
+  demon = "DEMON",
+  neutral = "NEUTRAL",
+}
 
 function createMissions() {
   const missions = [];
@@ -8,6 +15,7 @@ function createMissions() {
     missions[i] = {
       title: title.slice(0, title.length - i),
       id: i,
+      type: faker.helpers.enumValue(MissionPositionType),
     };
   }
 
