@@ -7,6 +7,7 @@ import MainMenuScreen from "./lib/pages/mainMenu/ui";
 import { Chars } from "$lib/widgets/chars";
 import { Missions } from "$lib/widgets/missions/ui";
 
+import "@pixi/events";
 import "./App.css";
 
 const router = createBrowserRouter([
