@@ -5,11 +5,12 @@ import { useUnit } from "effector-react";
 import { $activeMission, $missions, showMission } from "../model";
 import { MissionCard } from "./missionCard";
 
-export function MissionBoard() {
+export function MissionBoard({ scale = 1 }: { scale: number }) {
   const [missions, activeMission] = useUnit([$missions, $activeMission]);
+
   return (
-    <>
-      <Container width={400} height={400} position={[300, 200]}>
+    <Container position={[0, 0]} anchor={0.5}>
+      <Container position={[0, 0]} anchor={0.5} scale={scale}>
         <Sprite
           image="./images/missionboard.png"
           width={400}
@@ -18,42 +19,48 @@ export function MissionBoard() {
           x={0}
           y={0}
         ></Sprite>
-        <Container width={300} height={150} position={[100, 100]}>
+        <Container position={[100, 100]}>
           {missions.map((mission) => (
-            <MissionSmallCard {...mission} key={mission.id} />
+            <MissionSmallCard
+              offsetX={400 / 2}
+              offsetY={400 / 3}
+              mission={mission}
+              key={mission.id}
+            />
           ))}
         </Container>
       </Container>
-
-      {activeMission !== null && <MissionCard {...activeMission} />}
-    </>
+    </Container>
   );
 }
 
-function MissionSmallCard(mission: Mission) {
+function MissionSmallCard({
+  mission,
+  offsetX = 0,
+  offsetY = 0,
+}: {
+  mission: Mission;
+  offsetX: number;
+  offsetY: number;
+}) {
   const setActiveMission = useUnit(showMission);
   const [position] = useState<[number, number]>([
-    Math.floor(Math.random() * 200),
-    Math.floor(Math.random() * 100),
+    Math.floor(Math.random() * offsetX),
+    Math.floor(Math.random() * offsetY),
   ]);
 
   return (
-    <Container
-      width={40}
-      height={60}
-      anchor={0.5}
-      position={position}
-      onclick={(e) => {
-        e.stopPropagation();
-        setActiveMission(mission);
-      }}
-    >
+    <Container anchor={0.5} position={position} eventMode="static">
       <Sprite
-        interactive={true}
+        interactive
         image="./images/mission.png"
         width={40}
         height={60}
         anchor={0.5}
+        onclick={(e) => {
+          e.stopPropagation();
+          setActiveMission(mission);
+        }}
       ></Sprite>
     </Container>
   );

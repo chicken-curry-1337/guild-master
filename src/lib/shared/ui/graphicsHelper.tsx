@@ -6,11 +6,13 @@ export function GraphicsHelper({
   y,
   width,
   height,
+  scale = 1,
 }: {
   x: number;
   y: number;
   width: number;
   height: number;
+  scale?: number;
 }) {
   const draw = useCallback((g) => {
     g.clear();
@@ -20,5 +22,5 @@ export function GraphicsHelper({
     g.endFill();
   }, []);
 
-  return <Graphics draw={draw} />;
+  return <Graphics draw={draw} scale={scale} />;
 }

@@ -5,20 +5,38 @@ import { GraphicsHelper } from "$lib/shared/ui/graphicsHelper";
 import { hideMission } from "../model";
 import { Mission } from "../model/types";
 
-export function MissionCard(mission: Mission) {
+export function MissionCard({
+  mission,
+  scale = 1,
+}: {
+  mission: Mission;
+  scale: number;
+}) {
   const hideMissionCard = useUnit(hideMission);
   return (
-    <>
+    <Container scale={scale}>
       <Graphics
         eventMode={"static"}
-        hitArea={new Rectangle(0, 0, 800, 800)}
+        width={1920}
+        height={1080}
+        anchor={0.5}
+        hitArea={new Rectangle(0, 0, 1920, 1080)}
         onclick={(e) => {
           e.stopPropagation();
           hideMissionCard();
         }}
+        zIndex={1}
       />
-      <Container width={600} height={300} position={[10, 10]}>
-        <GraphicsHelper x={10} y={10} width={600} height={300} />
+      <Container
+        position={[10, 10]}
+        anchor={0.5}
+        zIndex={2}
+        eventMode="static"
+        hitArea={new Rectangle(0, 0, 400, 200)}
+        width={400}
+        height={200}
+      >
+        <GraphicsHelper x={0} y={0} width={400} height={200} />
         <Text
           text={`title: ${mission.title}`}
           anchor={0}
@@ -44,6 +62,6 @@ export function MissionCard(mission: Mission) {
           }}
         />
       </Container>
-    </>
+    </Container>
   );
 }
