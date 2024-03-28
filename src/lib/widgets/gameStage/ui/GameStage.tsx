@@ -17,6 +17,8 @@ export function GameStage({ width = 800, height = 600, children }) {
         width={width}
         height={height}
         options={{ background: 0x1099bb }}
+        raf={false}
+        renderOnComponentChange={true}
       >
         {children}
       </Stage>
