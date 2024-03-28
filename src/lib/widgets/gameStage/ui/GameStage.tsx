@@ -1,5 +1,5 @@
 import { Container, Stage } from "@pixi/react";
-import { useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { GraphicsHelper } from "../../../shared/ui/graphicsHelper";
 import { MissionBoard } from "$lib/entities/missionBoard/view";
@@ -18,6 +18,8 @@ const StageContainer = styled.div`
 const WIDTH = 1920;
 const HEIGHT = 1080;
 
+export const ResizeContext = createContext(1);
+
 export function GameStage() {
   const activeMission = useUnit($activeMission);
   const [width, setWidth] = useState(window.innerWidth);
@@ -35,39 +37,30 @@ export function GameStage() {
   }, []);
 
   const scale = useMemo(() => {
-    return width > height ? width / WIDTH : height / HEIGHT;
+    return width / WIDTH;
   }, [width, height]);
-
   return (
-    <StageContainer>
-      <Stage
-        width={width}
-        height={height}
-        options={{
-          autoDensity: true,
-          width: WIDTH * scale,
-          height: HEIGHT * scale,
-          background: 0x1099bb,
-          resizeTo: window,
-        }}
-        raf={false}
-        renderOnComponentChange={true}
-      >
-        <Container>
-          {/* <GraphicsHelper
-            x={0}
-            y={0}
-            width={WIDTH}
-            height={HEIGHT}
-            scale={scale}
-          /> */}
-          <MissionBoard scale={scale} />
-          {activeMission !== null && (
-            <MissionCard mission={activeMission} scale={scale} />
-          )}
-        </Container>
-      </Stage>
-    </StageContainer>
+    <ResizeContext.Provider value={scale}>
+      <StageContainer>
+        <Stage
+          width={width}
+          height={height}
+          options={{
+            //   autoDensity: true,
+            background: 0x1099bb,
+            resizeTo: window,
+          }}
+          raf={false}
+          renderOnComponentChange={true}
+        >
+          <Container width={WIDTH} height={HEIGHT} scale={scale} anchor={0.5}>
+            <GraphicsHelper width={WIDTH} height={HEIGHT} />
+            <MissionBoard scale={scale} position={[WIDTH / 2, HEIGHT / 2]} />
+            {activeMission !== null && <MissionCard mission={activeMission} />}
+          </Container>
+        </Stage>
+      </StageContainer>
+    </ResizeContext.Provider>
   );
 }
 

@@ -2,24 +2,29 @@ import { Container, Sprite } from "@pixi/react";
 import { useState } from "react";
 import { Mission } from "../model/types";
 import { useUnit } from "effector-react";
-import { $activeMission, $missions, showMission } from "../model";
-import { MissionCard } from "./missionCard";
+import { $missions, showMission } from "../model";
 
-export function MissionBoard({ scale = 1 }: { scale: number }) {
-  const [missions, activeMission] = useUnit([$missions, $activeMission]);
+export function MissionBoard({
+  scale = 1,
+  position = [0, 0],
+}: {
+  scale?: number;
+  position?: [number, number];
+}) {
+  const [missions] = useUnit([$missions]);
 
   return (
-    <Container position={[0, 0]} anchor={0.5}>
-      <Container position={[0, 0]} anchor={0.5} scale={scale}>
+    <Container position={position} anchor={0.5} scale={scale}>
+      <Container position={[0, 0]} anchor={0.5}>
         <Sprite
           image="./images/missionboard.png"
           width={400}
           height={400}
-          anchor={0}
+          anchor={0.5}
           x={0}
           y={0}
         ></Sprite>
-        <Container position={[100, 100]}>
+        <Container anchor={0.5} x={-100} y={-100}>
           {missions.map((mission) => (
             <MissionSmallCard
               offsetX={400 / 2}
