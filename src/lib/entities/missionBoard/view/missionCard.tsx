@@ -1,59 +1,16 @@
 import { Rectangle } from "pixi.js";
-import { Graphics, Container, Text } from "@pixi/react";
+import { Container, Text } from "@pixi/react";
 import { useUnit } from "effector-react";
 import { GraphicsHelper } from "$lib/shared/ui/graphicsHelper";
+import { Modal } from "$lib/entities/gameScale/ui";
+import { GameScaleContext } from "$lib/entities/gameScale/model";
 import { hideMission } from "../model";
 import { Mission } from "../model/types";
-import { useEffect, useState } from "react";
-import { ResizeContext } from "../../../widgets/gameStage/ui/GameStage";
-
-export function Modal({
-  onOutsideClick,
-  children,
-}: {
-  children?: any;
-  onOutsideClick?(): void;
-}) {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
-
-  function onResize() {
-    setWidth(window.innerWidth);
-    setHeight(window.innerHeight);
-  }
-
-  useEffect(() => {
-    window.addEventListener("resize", onResize);
-
-    () => window.removeEventListener("resize", onResize);
-  }, []);
-  return (
-    <>
-      <ResizeContext.Consumer>
-        {(scale) => (
-          <Graphics
-            eventMode={"static"}
-            width={width * scale}
-            height={height * scale}
-            anchor={0}
-            hitArea={new Rectangle(0, 0, 1920, 1080)}
-            onclick={(e) => {
-              e.stopPropagation();
-              if (onOutsideClick) onOutsideClick();
-            }}
-            zIndex={1}
-          />
-        )}
-      </ResizeContext.Consumer>
-      {children}
-    </>
-  );
-}
 
 export function MissionCard({ mission }: { mission: Mission }) {
   const hideMissionCard = useUnit(hideMission);
   return (
-    <ResizeContext.Consumer>
+    <GameScaleContext.Consumer>
       {(scale) => (
         <Container scale={scale}>
           <Modal
@@ -99,6 +56,6 @@ export function MissionCard({ mission }: { mission: Mission }) {
           </Modal>
         </Container>
       )}
-    </ResizeContext.Consumer>
+    </GameScaleContext.Consumer>
   );
 }

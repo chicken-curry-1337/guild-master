@@ -1,11 +1,12 @@
-import { Container, Stage } from "@pixi/react";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { GraphicsHelper } from "../../../shared/ui/graphicsHelper";
+import { useUnit } from "effector-react";
+import { Container, Stage } from "@pixi/react";
+import { GraphicsHelper } from "$lib/shared/ui/graphicsHelper";
 import { MissionBoard } from "$lib/entities/missionBoard/view";
 import { MissionCard } from "$lib/entities/missionBoard/view/missionCard";
-import { useUnit } from "effector-react";
 import { $activeMission } from "$lib/entities/missionBoard/model";
+import { GameScaleContext } from "$lib/entities/gameScale/model";
 
 const StageContainer = styled.div`
   position: relative;
@@ -17,8 +18,6 @@ const StageContainer = styled.div`
 // todo: set graphic settings resize (?)
 const WIDTH = 1920;
 const HEIGHT = 1080;
-
-export const ResizeContext = createContext(1);
 
 export function GameStage() {
   const activeMission = useUnit($activeMission);
@@ -38,9 +37,10 @@ export function GameStage() {
 
   const scale = useMemo(() => {
     return width / WIDTH;
-  }, [width, height]);
+  }, [width]);
+
   return (
-    <ResizeContext.Provider value={scale}>
+    <GameScaleContext.Provider value={scale}>
       <StageContainer>
         <Stage
           width={width}
@@ -60,7 +60,7 @@ export function GameStage() {
           </Container>
         </Stage>
       </StageContainer>
-    </ResizeContext.Provider>
+    </GameScaleContext.Provider>
   );
 }
 
